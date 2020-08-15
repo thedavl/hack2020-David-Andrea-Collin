@@ -1,29 +1,57 @@
 const express = require('express');
 const router = express.Router();
+const mongoose = require('mongoose');
+
+const Workout = require('../models/workout');
 
 router.get('/', (req, res, next) => {
-    res.status(200).json({
-        message: 'GET request to workouts endpoint'
-    });
+    Workout.find()
+        .exec()
+        .then(docs => {
+            const response = {
+                count: docs.length,
+                workouts: docs
+            };
+            res.status(200).json(response);
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({ error: err });
+        });
 });
 
 router.get('/:workoutId', (req, res, next) => {
     const id = req.params.workoutId;
-    res.status(200).json({
-        message: 'GET request to SPECIFIC WORKOUT endpoint',
-        id: id
-    });
+    Workout.findById(id)
+        .exec()
+        .then(doc => {
+            console.log(doc);
+            res.status(200).json(doc);
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({ error: err });
+        });
 });
 
 router.post('/', (req, res, next) => {
-    const workout = {
+    const workout = new Workout({
+        _id: new mongoose.Types.ObjectId(),
         title: req.body.title,
         description: req.body.description
-    };
-    res.status(200).json({
-        message: 'POST to workout endpoint',
-        createdWorkout: workout
-    })
-})
+    });
+    workout
+        .save()
+        .then(result => {
+            res.status(201).json({
+                message: 'POSTed to workout endpoint',
+                createdWorkout: result
+            });
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({ error: err });
+        });
+});
 
 module.exports = router;

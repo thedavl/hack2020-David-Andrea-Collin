@@ -2,8 +2,19 @@ const express = require('express');
 const app = express();
 const morgan = require('morgan');
 const bodyparser = require('body-parser');
+const mongoose = require('mongoose');
 
 const workoutRoutes = require('./api/routes/workouts');
+
+mongoose.connect(
+    'mongodb+srv://Hack2020Admin:' + 
+    process.env.MONGO_ATLAS_PW + 
+    '@cluster0.6ph5e.mongodb.net/HACK2020-DAVID-ANDREA-COLLIN?retryWrites=true&w=majority',
+    {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+    }
+);
 
 app.use(morgan('dev'));
 app.use(bodyparser.urlencoded({ extended: false }));
@@ -24,12 +35,6 @@ app.use((req, res, next) => {
 );
 
 app.use('/workouts', workoutRoutes);
-
-app.use((req, res, next) => {
-    res.status(200).json({
-        message: "Yay"
-    });
-});
 
 app.use((req, res, next) => {
     const error = new Error('Not Found');
