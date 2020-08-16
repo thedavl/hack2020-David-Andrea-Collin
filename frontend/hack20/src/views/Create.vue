@@ -1,5 +1,6 @@
 <template>
     <div>
+        <!-- title and field to insert name -->
         <p class="createTitle">Create Your Own Workout!</p>
         <input name="workout_name" placeholder="workout name...">
         <p> Type (select all that apply)</p>
@@ -16,24 +17,25 @@
                 <button :id="time" @click="updateSelectedTime(time)" :class="{ active: selectedTime == time }" class="btn btn-secondary">{{ time }}</button>
             </div>
         </div>
+        <!-- displays selected types and times for debugging purposes -->
         <div>
             <p> "{{selectedTypes}}</p>
             <p> "{{selectedTime}}</p>
         </div>
+        <!-- add sets and reps of new workout -->
         <div> 
             <p> Workout </p>
+            <div> <button @click="addMove()"> Add Set! </button> </div>
             <input name="set_name" placeholder="set name...">
-            <button :id="setNum" @click="incrementNumber()">{{setNum + "x"}}</button>
-            
+            <button :id="setNum" @click="incrementNumber()">{{setNum + "x"}}</button> 
         </div>
-        <div> <button @click="addMove()"> Add Move! </button> </div>
-        <div> <button @click="addMove()"> Add Set! </button> </div>
+
+        <div> <button @click="addMove()"> Add Rep! </button> </div>
 
         <div class="new set">
         <label for="duration">:</label>
         <input type="text" required placeholder="set name">
-
-      </div>
+        </div>
     </div>
 </template>
 
@@ -66,7 +68,13 @@ export default {
             ],
             selectedTime: 0,
             selectedTypes: [],
-            setNum: 1
+            setNum: 1,
+            setName: "",
+            numOfSets: 0,
+            repName: "",
+            numOfReps: 0,
+            //set: [ {setName, numOfSets, rep: []}],
+            //rep: [ {repName, numOfReps}]
         }
     },
     methods: {
