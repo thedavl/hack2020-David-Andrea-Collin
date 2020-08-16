@@ -5,6 +5,7 @@ const bodyparser = require('body-parser');
 const mongoose = require('mongoose');
 
 const workoutRoutes = require('./api/routes/workouts');
+const userRoutes = require('./api/routes/users')
 
 mongoose.connect(
     'mongodb+srv://Hack2020Admin:' + 
@@ -35,6 +36,7 @@ app.use((req, res, next) => {
 );
 
 app.use('/workouts', workoutRoutes);
+app.use('/users', userRoutes);
 
 app.use((req, res, next) => {
     const error = new Error('Not Found');
