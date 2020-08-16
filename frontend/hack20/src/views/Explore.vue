@@ -43,6 +43,10 @@
             <div class="detail-description-container">
               {{ selectedWorkout.description }}
             </div>
+            <div class="save-unsave">
+                <br>
+                <button class="btn btn-outline-dark" id="unsave" @click="save()">+</button>
+            </div>
           </div>
           <div class="detail-container" v-else></div>
         </div>
@@ -85,7 +89,29 @@ export default {
             selectedWorkout: null
         }
     },
-    mounted() {
+    async mounted() {
+        var alreadySaved = [];
+        await fetch('https://hack-2020-backend.uc.r.appspot.com/users/5f387cc2cd4be563940f57de',
+          {
+              method: 'GET', // *GET, POST, PUT, DELETE, etc.
+              headers: {
+              'Content-Type': 'application/json'
+          },
+          // body: JSON.stringify(data) 
+        })
+            .then(res => res.json())
+            .then(res => {
+                var posts = res.user.saved_posts;
+                for (var i = 0; i < posts.length; i++) {
+                    alreadySaved.push(posts[i]._id);
+                }
+            })
+            .catch(err => {
+                console.log(err);
+            });
+        console.log(alreadySaved);
+
+        // first put all the ids of posts already saved into a "saved" arr
         fetch('https://hack-2020-backend.uc.r.appspot.com/workouts',
                 {
                     method: 'GET', // *GET, POST, PUT, DELETE, etc.
@@ -96,15 +122,34 @@ export default {
             })
             .then(res => res.json())
             .then(res => {
-                console.log(res);
-                this.allWorkouts = res.workouts;
-                this.displayedWorkouts = res.workouts;
+                // console.log(res);
+                for (var i = 0; i < res.workouts.length; i++) {
+                    if (!alreadySaved.includes(res.workouts[i]._id)) {
+                        console.log("id", res.workouts[i]._id)
+                        this.allWorkouts.push(res.workouts[i]);
+                        this.displayedWorkouts.push(res.workouts[i])
+                    }
+                }
             })
             .catch(err => {
                 console.log(err);
             });
     },
     methods: {
+        save() {
+            fetch("https://hack-2020-backend.uc.r.appspot.com/workouts/" + this.selectedWorkout._id + "/save",
+                {
+                    method: 'POST'
+                })
+                .then(res => res.json())
+                .then(res => {
+                    console.log(res);
+                    window.location.reload();
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+        },
         switchSelectedWorkout(workout) {
             this.selectedWorkout = workout;
         },
@@ -186,6 +231,11 @@ export default {
 </script>
 
 <style>
+.save-unsave {
+    margin: 0 auto;
+    width: 100%;
+    text-align: center;
+}
 .timeOptions {
     display: flex;
 }

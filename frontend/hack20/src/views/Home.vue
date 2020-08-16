@@ -46,6 +46,10 @@
             <div class="detail-description-container">
               {{ selectedWorkout.description }}
             </div>
+            <div class="save-unsave">
+              <br>
+              <button class="btn btn-outline-dark" id="unsave" @click="unsave()">-</button>
+            </div>
           </div>
           <div class="detail-container" v-else></div>
         </div>
@@ -95,6 +99,20 @@ export default {
     }
   },
   methods: {
+    unsave() {
+      fetch("https://hack-2020-backend.uc.r.appspot.com/workouts/" + this.selectedWorkout._id + "/unsave",
+        {
+          method: 'DELETE'
+        })
+        .then(res => res.json())
+        .then(res => {
+          console.log(res);
+          window.location.reload();
+        })
+        .catch(err => {
+          console.log(err);
+        })
+    },
     switchSelectedWorkout(workout) {
       this.selectedWorkout = workout;
     },
@@ -193,6 +211,11 @@ export default {
 </script>
 
 <style>
+#unsave{
+  margin-top: 10px;
+  border-radius: 10px;
+  margin: 0 auto;
+}
 .detail-description-container {
   width: 93%;
   height: 50%;
