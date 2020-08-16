@@ -102,7 +102,7 @@ export default {
       this.$router.push('/explore');
     },
     getAllWorkouts() {
-      fetch('https://hack-2020-backend.uc.r.appspot.com/workouts',
+      fetch('https://hack-2020-backend.uc.r.appspot.com/users/5f387cc2cd4be563940f57de',
           {
               method: 'GET', // *GET, POST, PUT, DELETE, etc.
               headers: {
@@ -113,8 +113,8 @@ export default {
       .then(res => res.json())
       .then(res => {
           console.log(res);
-          this.allWorkouts = res.workouts;
-          this.displayedWorkouts = res.workouts;
+          this.allWorkouts = res.user.saved_posts;
+          this.displayedWorkouts = res.user.saved_posts;
       })
       .catch(err => {
           console.log(err);
