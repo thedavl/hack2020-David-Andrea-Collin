@@ -13,7 +13,7 @@
         <br>
         <div class = "timeOptions">
             <div v-for="time in workoutTimes" :key="time">
-                <button class="btn btn-outline-dark" :id="time" @click="updateSelectedTimes(time)" :class="{ active: selectedTimes.includes(time) }">{{ time }}</button>
+                <button class="btn btn-outline-dark" :id="time" @click="updateSelectedTimes(time)" :class="{ active: selectedTimes.includes(time) }">{{ time }} min</button>
             </div>
         </div>
         <div>
@@ -134,6 +134,16 @@ export default {
 }
 .typeOptions {
     display: flex;
+}
+
+.timeOptions button {
+    margin: 5px;
+    border-radius: 15px;
+}
+
+.typeOptions button {
+    margin: 5px;
+    border-radius: 15px;
 }
 .workout-card-container {
     height: 70vh;
