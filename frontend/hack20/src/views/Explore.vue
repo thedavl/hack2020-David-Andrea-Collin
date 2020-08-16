@@ -206,7 +206,7 @@ export default {
     height: 70vh;
     width: 40vw;
     overflow-y: scroll;
-    max-width: 570px;
+    max-width: 520px;
     margin-right: 20px;
 }
 .tag-bubble {
@@ -240,10 +240,10 @@ export default {
 .workout-card {
     background: #C4C4C4;
     border-radius: 6px;
-    padding: 5px 0px 5px 20px;
+    padding: 5px 0px 5px 10px;
     margin-bottom: 20px;
     margin-right: -5px;
-    max-width: 550px;
+    max-width: 500px;
     cursor: pointer;
 }
 </style>

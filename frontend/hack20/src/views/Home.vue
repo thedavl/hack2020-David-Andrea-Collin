@@ -41,7 +41,7 @@
               <p class="tag-bubble" v-for="tag in selectedWorkout.tags" :key="tag" :id="'static-' + tag">
                 {{ tag }}
               </p>
-              <!-- <p>By: {{ selectedWorkout.user }}</p> -->
+              <p>By: {{ selectedWorkout.user }}</p>
             </div>
             <div class="detail-description-container">
               {{ selectedWorkout.description }}
@@ -195,7 +195,7 @@ export default {
 <style>
 .detail-description-container {
   width: 93%;
-  height: 60%;
+  height: 50%;
   background: #DEDEDE;
   border-radius: 6px;
   padding: 10px 15px 10px 15px;
@@ -223,6 +223,7 @@ export default {
   padding: 10px 15px 10px 15px;
   box-shadow: 0px 2px 6px rgb(116, 116, 116);
   min-width: 350px;
+  max-width: 400px;
   max-height: 450px;
 }
 .home-page {

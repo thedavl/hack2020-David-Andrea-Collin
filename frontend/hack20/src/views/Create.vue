@@ -3,14 +3,14 @@
         <h2 id="createWorkoutTitle">Create Workout</h2>
         <div id="create-page-body">
             <div id="left-create">
-                <input name="workout_name" placeholder="workout name">
+                <input name="workout_name" placeholder="workout name" v-model="title">
                 <br> <br>
 
-                <p>Type (select all that apply)</p>
+                <p>Workout Type (select all that apply)</p>
 
                 <div class = "typeOptions">
                     <div v-for="type in workoutTypes" :key="type">
-                        <button :id="type" @click="updateSelectedTypes(type)" :class="{ active: selectedTypes.includes(type) }" class="btn btn-success">{{ type }}</button>
+                        <button :id="type" @click="updateSelectedTypes(type)" :class="{ active: selectedTypes.includes(type) }" class="btn btn-outline-dark">{{ type }}</button>
                     </div>
                 </div>
 
@@ -26,20 +26,22 @@
             
             <div id="right-create">
                 <div> 
-                    <p> Workout </p>
-                    <button @click="addMove()"> Add Set! </button>
+                    <p> Workout Description</p>
+                    <textarea class="enter-description" v-model="description" rows=15 cols=50 placeholder="Write about your reps, sets, resting time, overall tips" />
+                    <!-- <button @click="addMove()"> Add Set! </button>
                     <input name="set_name" placeholder="set name...">
-                    <button :id="setNum" @click="incrementNumber()">{{setNum + "x"}}</button> 
+                    <button :id="setNum" @click="incrementNumber()">{{setNum + "x"}}</button>  -->
                 </div>
 
-                <div> <button @click="addMove()"> Add Rep! </button> </div>
+                <!-- <div> <button @click="addMove()"> Add Rep! </button> </div>
 
                 <div class="new set">
                     <label for="duration">:</label>
                     <input type="text" required placeholder="set name">
-                </div>
+                </div> -->
             </div>
         </div>
+        <button class="btn btn-success" @click="create()" >Create</button>
     </div>
 </template>
 
@@ -78,11 +80,33 @@ export default {
             numOfSets: 0,
             repName: "",
             numOfReps: 0,
+            description: null,
+            title: null
             //set: [ {setName, numOfSets, rep: []}],
             //rep: [ {repName, numOfReps}]
         }
     },
     methods: {
+        async create() {
+            const body = await JSON.stringify({
+                title: this.title,
+                description: this.description,
+                user: "5f387cc2cd4be563940f57de", // hard coded the user Andrea dang,
+                duration: Number(this.selectedTime),
+                tags: this.selectedTypes
+            });
+            fetch("https://hack-2020-backend.uc.r.appspot.com/workouts", {
+                method: "POST",
+                headers: { 'Content-Type':'application/json' },
+                body: body
+            })
+            .then(res => {
+                console.log(res);
+            })
+            .catch(err => {
+                console.log(err);
+            })
+        },
         updateSelectedTypes(type) {
             if (this.selectedTypes.includes(type)) {
                 this.remove(this.selectedTypes, type);
@@ -122,6 +146,11 @@ export default {
 </script>
 
 <style scoped>
+.enter-description {
+    resize: none;
+    max-width: 100%;
+    max-height: 100%;    
+}
 
 #create-page {
   text-align: left;
