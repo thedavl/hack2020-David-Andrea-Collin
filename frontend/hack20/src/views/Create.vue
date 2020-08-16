@@ -1,25 +1,32 @@
 <template>
     <div>
-        <p class="createTitle">THIS IS THE CREATE PAGE</p>
+        <p class="createTitle">Create Your Own Workout!</p>
         <input name="workout_name" placeholder="workout name...">
         <p> Type (select all that apply)</p>
 
-        <!--display tags here -->
+        <!--display types here -->
         <div class = "typeOptions">
             <li v-for="type in workoutTypes" :key="type">
-                <button :id="type" @click="updateSelectedTypes(type)" :class="{ focus: selectedTypes.includes(type) }">{{ type }}</button>
+                <button :id="type" @click="updateSelectedTypes(type)" :class="{ active: selectedTypes.includes(type) }">{{ type }}</button>
             </li>
         </div>
         <!--display times here -->
         <div class = "timeOptions">
             <li v-for="time in workoutTimes" :key="time">
-                <button :id="time" @click="updateSelectedTime(time)" :class="{ focus: selectedTime == time }">{{ time }}</button>
+                <button :id="time" @click="updateSelectedTime(time)" :class="{ active: selectedTime == time }">{{ time }}</button>
             </li>
         </div>
         <div>
             <p> "{{selectedTypes}}</p>
             <p> "{{selectedTime}}</p>
         </div>
+        <div> 
+            <p> Workout </p>
+            <input name="set_name" placeholder="set name...">
+            <button :id="setNum" @click="incrementNumber()">{{setNum + "x"}}</button>
+            
+        </div>
+        <div> <button @click="addMove()"> Add Move! </button> </div>
     </div>
         
     
@@ -54,7 +61,8 @@ export default {
         120
       ],
       selectedTime: 0,
-      selectedTypes: []
+      selectedTypes: [],
+      setNum: 1
       }
     },
     methods: {
@@ -74,6 +82,17 @@ export default {
                     array.splice(i, 1);
                 }
             }
+        },
+        incrementNumber() {
+            if (this.setNum <= 4){
+                this.setNum++;
+            } else {
+                this.setNum = 1;
+            }
+            
+        },
+        addMove() {
+
         }
     }
 }
