@@ -1,6 +1,5 @@
 <template>
   <div class="home-page">
-    <button type="button" class="btn btn-outline-dark" @click="toExplore">To Explore Page</button>
     <div id="savedWorkouts">
       <h2 class="savedWorkoutsTitle">Saved Workouts</h2>
       
@@ -26,7 +25,7 @@
               <div class="workout-card-header">
                 <p class="workout-card-title">{{ workout.title }}</p>
                 <div class="tag-flex">
-                  <p class="tag-bubble" v-for="tag in workout.tags" :key="tag">
+                  <p class="tag-bubble" v-for="tag in workout.tags" :id="'static-' + tag" :key="tag">
                     {{ tag }}
                   </p>
                 </div>
@@ -39,9 +38,10 @@
               <p class="duration">{{ selectedWorkout.duration }} Minutes</p>
             </div>
             <div class="detail-tag-flex">
-              <p class="tag-bubble" v-for="tag in selectedWorkout.tags" :key="tag">
+              <p class="tag-bubble" v-for="tag in selectedWorkout.tags" :key="tag" :id="'static-' + tag">
                 {{ tag }}
               </p>
+              <!-- <p>By: {{ selectedWorkout.user }}</p> -->
             </div>
             <div class="detail-description-container">
               {{ selectedWorkout.description }}
@@ -221,10 +221,58 @@ export default {
   padding: 10px 15px 10px 15px;
   box-shadow: 0px 2px 6px rgb(116, 116, 116);
   min-width: 350px;
-  max-height: 400px;
+  max-height: 450px;
 }
 .home-page {
   text-align: left;
-  margin-left: 30vw;
+  margin: 0 auto;
+  max-width: 1000px;
 }
+#full-body:hover, #full-body:active, #full-body.active, #static-full-body {
+  color: black;
+  background-color: #7BB8FF;
+  border: 1px solid #7BB8FF !important; 
+}
+#calisthenics:hover, #calisthenics:active, #calisthenics.active, #static-calisthenics {
+  color: black;
+  background-color: #FF74D0;
+  border: 1px solid #FF74D0 !important; 
+}
+#core:hover, #core:active, #core.active, #static-core {
+  color: black;
+  background-color: #78FFFF;
+  border: 1px solid #78FFFF !important; 
+}
+#hiit:hover, #hiit:active, #hiit.active, #static-hiit {
+  color: black;
+  background-color: #B191F5;
+  border: 1px solid #B191F5 !important; 
+}
+#strength:hover, #strength:active, #strength.active, #static-strength {
+  color: black;
+  background-color: #F4F900;
+  border: 1px solid #F4F900 !important; 
+}
+#upper-body:hover, #upper-body:active, #upper-body.active, #static-upper-body {
+  color: black;
+  background-color: #FF6A73;
+  border: 1px solid #FF6A73 !important; 
+}
+#lower-body:hover, #lower-body:active, #lower-body.active, #static-lower-body {
+  color: black;
+  background-color: #E0E400;
+  border: 1px solid #E0E400 !important; 
+}
+#arms:hover, #arms:active, #arms.active, #static-arms {
+  color: black;
+  background-color: #95FF70;
+  border: 1px solid #95FF70 !important; 
+}
+#legs:hover, #legs:active, #legs.active, #static-legs {
+  color: black;
+  background-color: #7896FF;
+  border: 1px solid #7896FF !important; 
+}
+
+
 </style>
