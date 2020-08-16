@@ -63,7 +63,8 @@ export default {
                 "upper-body",
                 "lower-body",
                 "arms",
-                "legs"
+                "legs",
+                "cardio"
             ],
             workoutTimes: [
                 5,
@@ -158,6 +159,14 @@ export default {
                     that.displayedWorkouts.push(workout);
                 }
             });
+
+             if (!this.displayedWorkouts.includes(this.selectedWorkout)) {
+                if (this.displayedWorkouts.length > 0) {
+                    this.selectedWorkout = this.displayedWorkouts[0];
+                } else {
+                    this.selectedWorkout = null;
+                }
+            }
         },
         remove(array, type) {
             for (var i = 0; i < array.length; i++) {
