@@ -35,6 +35,10 @@ app.use((req, res, next) => {
   }
 );
 
+app.get('/', (req, res, next) => {
+    res.send('This is the backend for Hack 2020 - David, Andrea, Collin');
+})
+
 app.use('/workouts', workoutRoutes);
 app.use('/users', userRoutes);
 
