@@ -1,27 +1,27 @@
 <template>
-  <div class="home">
+  <div class="home-page">
     <p>THIS IS HOME</p>
     <button @click="toExplore">Go To Explore Page</button>
     <div id="savedWorkouts">
       <h2 class="savedWorkoutsTitle">Saved Workouts</h2>
       
       <div class="typeOptions">
-        <button id="all" @click="updateActiveTypes('all')" :class="{ active: showAll }">all</button>
-        <button id="none" @click="updateActiveTypes('none')" :class="{ active: showNone }">none</button>
+        <button class="btn btn-outline-dark" id="all" @click="updateSelectedTypes('all')" :class="{ active: showAll }">all</button>
+        <button class="btn btn-outline-dark" id="none" @click="updateSelectedTypes('none')" :class="{ active: showNone }">none</button>
 
-        <li v-for="type in workoutTypes" :key="type">
-          <button :id="type" @click="updateActiveTypes(type)" :class="{ active: activeTypes.includes(type) }">{{ type }}</button>
-        </li>
+        <div v-for="type in workoutTypes" :key="type">
+          <button class="btn btn-outline-dark" :id="type" @click="updateSelectedTypes(type)" :class="{ active: selectedTypes.includes(type) }">{{ type }}</button>
+        </div>
       </div>
 
       <div class="timeOptions">
-        <li v-for="time in workoutTimes" :key="time">
-          <button :id="time" @click="updateActiveTimes(time)" :class="{ active: activeTimes.includes(time) }">{{ time }}</button>
-        </li>
+        <div v-for="time in workoutTimes" :key="time">
+          <button class="btn btn-outline-dark" :id="time" @click="updateActiveTimes(time)" :class="{ active: selectedTypes.includes(time) }">{{ time }}</button>
+        </div>
       </div>
 
       <div class="savedWorkouts">
-          <li v-for="workout in displayedWorkouts" :key="workout.title">
+          <div class="workout-card" v-for="workout in displayedWorkouts" :key="workout.title">
             <div class=displayedWorkout>
               <div class="displayedWorkoutHeader">
                 <p>{{ workout.title }}</p>
@@ -31,7 +31,7 @@
               </div>
               <p>{{ workout.description }}</p>
             </div>
-          </li>
+          </div>
       </div>
       <div id="workoutPreview"></div>
     </div>
@@ -47,7 +47,7 @@ export default {
     this.getAllWorkouts();
     var that = this;
     this.workoutTypes.forEach(function (workout) {
-      that.activeTypes.push(workout);
+      that.selectedTypes.push(workout);
     });
     // this.workoutTimes.forEach(function (time) {
     //   that.activeTimes.push(workout);
@@ -79,7 +79,7 @@ export default {
       ],
       allWorkouts: [],
       displayedWorkouts: [],
-      activeTypes: [],
+      selectedTypes: [],
       activeTimes: [],
       showAll: true,
       showNone: false
@@ -108,41 +108,42 @@ export default {
           console.log(err);
       });
     },
-    updateActiveTypes(type) {
+    updateSelectedTypes(type) {
       var that = this;
 
       if (type == 'none') {
-        this.activeTypes = [];
+        this.selectedTypes = [];
         this.displayedWorkouts = [];
         this.showNone = true;
         this.showAll = false;
+        this.updateDisplayed();
         return;
       }
 
       if (type == 'all') {
+        this.selectedTypes = [];
         this.allWorkouts.forEach(function (workout) {
           workout.tags.forEach(function (tag) {
-            if (!that.activeTypes.includes(tag)) {
-              that.activeTypes.push(tag);
+            if (!that.selectedTypes.includes(tag)) {
+              that.selectedTypes.push(tag);
             };
           });
         });
         this.showAll = true;
         this.showNone = false;
         this.displayedWorkouts = this.allWorkouts;
+        this.updateDisplayed();
         return;
       }
-
-      if (this.activeTypes.includes(type)) {
-        this.remove(this.activeTypes, type);
+      this.showNone = false;
+      console.log("typeee", type);
+      if (this.selectedTypes.includes(type)) {
+        this.remove(this.selectedTypes, type);
       } else {
-        this.activeTypes.push(type);
+        this.selectedTypes.push(type);
       }
-
-      // if 'none' is clicked, only color none button
-      if (this.activeTypes.length == 0) {
+      if (this.selectedTypes.length == 0) {
         this.showNone = true;
-        this.showAll = false;
       }
       this.updateDisplayed();
     },
@@ -157,39 +158,56 @@ export default {
     updateDisplayed() {
       this.displayedWorkouts = [];
 
-      var that = this;
-
-      if (this.showAll) {
-        this.allWorkouts.forEach(function (workout) {
-          that.displayedWorkouts.push(workout);
-        });
-        return;
-      }
-
       if (this.showNone) {
         return;
       }
 
-      this.allWorkouts.forEach(function (workout) {
-        var containsAllTypes = true;
-        that.activeTypes.forEach(function (type) {
-          if (!workout.tags.includes(type)) {
-            containsAllTypes = false;
-          }
-        });
-        if (containsAllTypes) {
+      var that = this;
+
+      if (this.showAll) {
+        for (var i = 0; i < this.workoutTypes.length; i++) {
+          that.selectedTypes.push(that.workoutTypes[i]);
+        }
+        that.allWorkouts.forEach(function (workout) {
           that.displayedWorkouts.push(workout);
-        }
+        });
+        return;
+      }
+      console.log("updating display")
+      this.allWorkouts.forEach(function (workout) {
+          console.log("iterating over:", workout.tags);
+          var hasAllSelectedTags = true;
+          that.selectedTypes.forEach(function (tag) {
+            if (!workout.tags.includes(tag)) {
+              hasAllSelectedTags = false;
+            };
+          });
+          if (hasAllSelectedTags) {
+            console.log("adding: " + workout.title);
+            that.displayedWorkouts.push(workout);
+          }
       });
 
-      var tempWorkouts = [];
-      this.displayedWorkouts.forEach(function (workout) {
-        if (that.activeTimes.includes(workout.duration)) {
-          tempWorkouts.push(workout);
-        }
-      });
+      // this.allWorkouts.forEach(function (workout) {
+      //   var containsAllTypes = true;
+      //   that.selectedTypes.forEach(function (type) {
+      //     if (!workout.tags.includes(type)) {
+      //       containsAllTypes = false;
+      //     }
+      //   });
+      //   if (containsAllTypes) {
+      //     that.displayedWorkouts.push(workout);
+      //   }
+      // });
 
-      this.displayedWorkouts = tempWorkouts;
+      // var tempWorkouts = [];
+      // this.displayedWorkouts.forEach(function (workout) {
+      //   if (that.activeTimes.includes(workout.duration)) {
+      //     tempWorkouts.push(workout);
+      //   }
+      // });
+
+      // this.displayedWorkouts = tempWorkouts;
     },
     remove(array, type) {
       for (var i = 0; i < array.length; i++) {
@@ -201,3 +219,23 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.workout-card {
+    background: #C4C4C4;
+    border-radius: 20px;
+    padding: 5px 0px 5px 20px;
+    margin-bottom: 20px;
+    margin-right: 5px;
+}
+.timeOptions {
+    display: flex;
+}
+.typeOptions {
+    display: flex;
+}
+.home-page {
+  text-align: left;
+  margin-left: 30vw;
+}
+</style>
