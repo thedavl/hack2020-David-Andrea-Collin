@@ -145,7 +145,7 @@ export default {
                 .then(res => res.json())
                 .then(res => {
                     console.log(res);
-                    // window.location.reload();
+                    window.location.reload();
                 })
                 .catch(err => {
                     console.log(err);
