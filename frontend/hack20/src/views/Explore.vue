@@ -4,6 +4,22 @@
         <button type="button" class="btn btn-outline-dark" @click="toHome()">To Home Page</button>
         <p>Tags</p>
         <!-- tag buttons -->
+        <div class = "typeOptions">
+            <div v-for="type in workoutTypes" :key="type">
+                <button class="btn btn-outline-dark" :id="type" @click="updateSelectedTypes(type)" :class="{ active: selectedTypes.includes(type) }">{{ type }}</button>
+            </div>
+        </div>
+        <!--display times here -->
+        <br>
+        <div class = "timeOptions">
+            <div v-for="time in workoutTimes" :key="time">
+                <button class="btn btn-outline-dark" :id="time" @click="updateSelectedTimes(time)" :class="{ active: selectedTimes.includes(time) }">{{ time }}</button>
+            </div>
+        </div>
+        <div>
+            <p> "{{selectedTypes}}"</p>
+            <p> "{{selectedTimes}}"</p>
+        </div>
         <div class="flex">
             <br><br><br>
         </div>
@@ -32,6 +48,30 @@ export default {
     name: "Explore",
     data() {
         return {
+            workoutTypes: [
+                "full-body",
+                "calisthenics",
+                "core",
+                "hiit",
+                "strength",
+                "upper-body",
+                "lower-body",
+                "arms",
+                "legs"
+            ],
+            workoutTimes: [
+                5,
+                10,
+                15,
+                20,
+                25,
+                30,
+                45,
+                60,
+                120
+            ],
+            selectedTimes: [],
+            selectedTypes: [],
             allWorkouts: [],
             displayedWorkouts: []
         }
@@ -56,6 +96,28 @@ export default {
             });
     },
     methods: {
+        updateSelectedTypes(type) {
+            if (this.selectedTypes.includes(type)) {
+                this.remove(this.selectedTypes, type);
+            } else {
+                this.selectedTypes.push(type);
+            }
+        },
+        updateSelectedTimes(time) {
+            if (this.selectedTimes.includes(time)) {
+                this.remove(this.selectedTimes, time);
+            } else {
+                this.selectedTimes.push(time);
+            }
+        },
+        remove(array, type) {
+            for (var i = 0; i < array.length; i++) {
+                if (array[i] == type) {
+                    array.splice(i, 1);
+                }
+            }
+        },
+
         toCreate() {
             this.$router.push('/create');
         },
@@ -67,6 +129,12 @@ export default {
 </script>
 
 <style scoped>
+.timeOptions {
+    display: flex;
+}
+.typeOptions {
+    display: flex;
+}
 .workout-card-container {
     height: 70vh;
     width: 40vw;

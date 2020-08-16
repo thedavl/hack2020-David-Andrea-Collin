@@ -28,9 +28,6 @@
         </div>
         <div> <button @click="addMove()"> Add Move! </button> </div>
     </div>
-        
-    
-
 </template>
 
 <script>
