@@ -19,18 +19,22 @@
         <p class="workouts-header">
             Workouts
         </p>
-        <div class="workout-card-container">
-            <div class="workout-card" v-for="workout in displayedWorkouts" :key="workout.title">
-                <div class="workout-card-header">
-                    <p class="workout-card-title">{{ workout.title }}</p>
-                    <div class="tag-flex">
-                        <p class="tag-bubble" v-for="tag in workout.tags" :key="tag">
-                            {{ tag }}
-                        </p>
+        <div class="main-flex">
+            <div class="workout-card-container">
+                <div class="workout-card" v-for="workout in displayedWorkouts" :key="workout.title">
+                    <div class="workout-card-header">
+                        <p class="workout-card-title">{{ workout.title }}</p>
+                        <div class="tag-flex">
+                            <p class="tag-bubble" v-for="tag in workout.tags" :key="tag">
+                                {{ tag }}
+                            </p>
+                        </div>
                     </div>
+                    <p>{{ workout.description }}</p>
+                    <p>Duration: {{ workout.duration }}</p>
                 </div>
-                <p>{{ workout.description }}</p>
-                <p>Duration: {{ workout.duration }}</p>
+            </div>
+            <div class="detail-container">
             </div>
         </div>
     </div>
@@ -180,29 +184,30 @@ export default {
     height: 70vh;
     width: 40vw;
     overflow-y: scroll;
+    max-width: 570px;
+    margin-right: 20px;
 }
 .tag-bubble {
-    margin: 0 10px 5px 10px;
+    margin: 3px;
     background: #3f3f3f;
-    padding: 0 20px 0 20px;
+    padding: 0 10px 0 10px;
     border-radius: 20px;
     color: white;
 }
 .tag-flex {
     display: flex;
-    max-width: 60%;
+    max-width: 65%;
     margin-right: 10px;
     flex-wrap: wrap;
     justify-content: flex-end;
 }
 .workout-card-title {
-    font-size: 26px;
+    font-size: 22px;
     margin: 0 20px 0 0;
 }
 .workout-card-header {
     display: flex;
     align-items: center;
-    margin-top: 5px;
     justify-content: space-between;
 }
 .workouts-page {
@@ -211,9 +216,11 @@ export default {
 }
 .workout-card {
     background: #C4C4C4;
-    border-radius: 20px;
+    border-radius: 6px;
     padding: 5px 0px 5px 20px;
     margin-bottom: 20px;
-    margin-right: 5px;
+    margin-right: -5px;
+    max-width: 550px;
+    cursor: pointer;
 }
 </style>

@@ -20,19 +20,34 @@
       <p class="workouts-header">
         Workouts
       </p>
-      <div class="workout-card-container">
-        <div class="workout-card" v-for="workout in displayedWorkouts" :key="workout.title">
-          <div class="workout-card-header">
-            <p class="workout-card-title">{{ workout.title }}</p>
-            <div class="tag-flex">
-              <p class="tag-bubble" v-for="tag in workout.tags" :key="tag">
+      <div class="main-flex">
+          <div class="workout-card-container">
+            <div class="workout-card" v-for="workout in displayedWorkouts" :key="workout.title" @click="switchSelectedWorkout(workout)">
+              <div class="workout-card-header">
+                <p class="workout-card-title">{{ workout.title }}</p>
+                <div class="tag-flex">
+                  <p class="tag-bubble" v-for="tag in workout.tags" :key="tag">
+                    {{ tag }}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="detail-container" v-if="selectedWorkout != null">
+            <div class="detail-header-flex">
+              <p class="detail-title">{{ selectedWorkout.title }}</p>
+              <p class="duration">{{ selectedWorkout.duration }} Minutes</p>
+            </div>
+            <div class="detail-tag-flex">
+              <p class="tag-bubble" v-for="tag in selectedWorkout.tags" :key="tag">
                 {{ tag }}
               </p>
             </div>
+            <div class="detail-description-container">
+              {{ selectedWorkout.description }}
+            </div>
           </div>
-          <p>{{ workout.description }}</p>
-          <p>Duration: {{ workout.duration }}</p>
-        </div>
+          <div class="detail-container" v-else></div>
         </div>
     </div>
   </div>
@@ -81,10 +96,14 @@ export default {
       displayedWorkouts: [],
       selectedTypes: [],
       selectedTime: null,
-      clearAll: true
+      clearAll: true,
+      selectedWorkout: null
     }
   },
   methods: {
+    switchSelectedWorkout(workout) {
+      this.selectedWorkout = workout;
+    },
     toExplore() {
       this.$router.push('/explore');
     },
@@ -171,13 +190,38 @@ export default {
 };
 </script>
 
-<style scoped>
-.workout-card {
-    background: #C4C4C4;
-    border-radius: 20px;
-    padding: 5px 0px 5px 20px;
-    margin-bottom: 20px;
-    margin-right: 5px;
+<style>
+.detail-description-container {
+  width: 93%;
+  height: 60%;
+  background: #DEDEDE;
+  border-radius: 6px;
+  padding: 10px 15px 10px 15px;
+  margin: 10px 0 0 10px;
+}
+.detail-header-flex{
+  display: flex;
+  justify-content: space-between;
+  margin: 5px 8px 0 8px;
+}
+.detail-tag-flex {
+  display: flex;
+  max-width: 65%;
+  margin: -9px 10px 0 6px;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+.main-flex {
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  max-width: 1000px;
+}
+.detail-container {
+  padding: 10px 15px 10px 15px;
+  box-shadow: 0px 2px 6px rgb(116, 116, 116);
+  min-width: 350px;
+  max-height: 400px;
 }
 .home-page {
   text-align: left;
