@@ -102,6 +102,8 @@ export default {
             })
             .then(res => {
                 console.log(res);
+                alert("workout successfully created!")
+                this.$router.push('/explore');
             })
             .catch(err => {
                 console.log(err);
