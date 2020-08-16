@@ -21,9 +21,6 @@
             <p> "{{selectedTime}}</p>
         </div>
     </div>
-        
-    
-
 </template>
 
 <script>
