@@ -1,7 +1,6 @@
 <template>
   <div class="home-page">
-    <p>THIS IS HOME</p>
-    <button @click="toExplore">Go To Explore Page</button>
+    <button type="button" class="btn btn-outline-dark" @click="toExplore">To Explore Page</button>
     <div id="savedWorkouts">
       <h2 class="savedWorkoutsTitle">Saved Workouts</h2>
       
@@ -17,21 +16,24 @@
           <button class="btn btn-outline-dark" :id="time" @click="updateSelectedTime(time)" :class="{ active: selectedTime == time }">{{ time }}</button>
         </div>
       </div>
-
-      <div class="savedWorkouts">
-          <div class="workout-card" v-for="workout in displayedWorkouts" :key="workout.title">
-            <div class=displayedWorkout>
-              <div class="displayedWorkoutHeader">
-                <p>{{ workout.title }}</p>
-                <p>by {{ workout.user }}</p>
-                <p>{{ workout.duration }}</p>
-                <p>{{ workout.tags }}</p>
-              </div>
-              <p>{{ workout.description }}</p>
+      <br>
+      <p class="workouts-header">
+        Workouts
+      </p>
+      <div class="workout-card-container">
+        <div class="workout-card" v-for="workout in displayedWorkouts" :key="workout.title">
+          <div class="workout-card-header">
+            <p class="workout-card-title">{{ workout.title }}</p>
+            <div class="tag-flex">
+              <p class="tag-bubble" v-for="tag in workout.tags" :key="tag">
+                {{ tag }}
+              </p>
             </div>
           </div>
-      </div>
-      <div id="workoutPreview"></div>
+          <p>{{ workout.description }}</p>
+          <p>Duration: {{ workout.duration }}</p>
+        </div>
+        </div>
     </div>
   </div>
 </template>
@@ -170,23 +172,12 @@ export default {
 </script>
 
 <style scoped>
-.btn {
-  margin-right: 10px;
-}
 .workout-card {
     background: #C4C4C4;
     border-radius: 20px;
     padding: 5px 0px 5px 20px;
     margin-bottom: 20px;
     margin-right: 5px;
-}
-.timeOptions {
-    display: flex;
-    margin-bottom: 5px;
-}
-.typeOptions {
-    display: flex;
-    margin-bottom: 5px;
 }
 .home-page {
   text-align: left;

@@ -2,27 +2,20 @@
     <div class="workouts-page">
         <button type="button" class="btn btn-outline-dark" @click="toCreate()">To Create Page</button>
         <button type="button" class="btn btn-outline-dark" @click="toHome()">To Home Page</button>
-        <p>Tags</p>
-        <!-- tag buttons -->
-        <div class = "typeOptions">
+        <h2 class="savedWorkoutsTitle">Explore Workouts</h2>
+        <div class="typeOptions">
+            <button class="btn btn-outline-dark" id="all" @click="updateSelectedTypes('clear')" :class="{ active: clearAll }">Clear</button>
+
             <div v-for="type in workoutTypes" :key="type">
-                <button class="btn btn-outline-dark" :id="type" @click="updateSelectedTypes(type)" :class="{ active: selectedTypes.includes(type) }">{{ type }}</button>
+            <button class="btn btn-outline-dark" :id="type" @click="updateSelectedTypes(type)" :class="{ active: selectedTypes.includes(type) }">{{ type }}</button>
             </div>
         </div>
-        <!--display times here -->
-        <br>
-        <div class = "timeOptions">
+        <div class="timeOptions">
             <div v-for="time in workoutTimes" :key="time">
-                <button class="btn btn-outline-dark" :id="time" @click="updateSelectedTimes(time)" :class="{ active: selectedTimes.includes(time) }">{{ time }} min</button>
+            <button class="btn btn-outline-dark" :id="time" @click="updateSelectedTime(time)" :class="{ active: selectedTime == time }">{{ time }}</button>
             </div>
         </div>
-        <div>
-            <p> "{{selectedTypes}}"</p>
-            <p> "{{selectedTimes}}"</p>
-        </div>
-        <div class="flex">
-            <br><br><br>
-        </div>
+        <br>
         <p class="workouts-header">
             Workouts
         </p>
@@ -70,10 +63,11 @@ export default {
                 60,
                 120
             ],
-            selectedTimes: [],
-            selectedTypes: [],
             allWorkouts: [],
-            displayedWorkouts: []
+            displayedWorkouts: [],
+            selectedTypes: [],
+            selectedTime: null,
+            clearAll: true
         }
     },
     mounted() {
@@ -96,19 +90,57 @@ export default {
             });
     },
     methods: {
+        updateSelectedTime(time) {
+            if (this.selectedTime == time) {
+                this.selectedTime = null;
+            } else {
+                this.selectedTime = time;
+                this.clearAll = false;
+            }
+            this.updateDisplayed();
+        },
         updateSelectedTypes(type) {
+            if (type == 'clear') {
+                console.log("ALL IS PRESSED")
+                this.selectedTypes = [];
+                this.selectedTime = null;
+                this.clearAll = true;
+                this.displayedWorkouts = this.allWorkouts;
+                return;
+            }
+            this.clearAll = false;
+            console.log("typeee", type);
             if (this.selectedTypes.includes(type)) {
                 this.remove(this.selectedTypes, type);
             } else {
                 this.selectedTypes.push(type);
             }
+            this.updateDisplayed();
         },
-        updateSelectedTimes(time) {
-            if (this.selectedTimes.includes(time)) {
-                this.remove(this.selectedTimes, time);
-            } else {
-                this.selectedTimes.push(time);
+        updateDisplayed() {
+            if (this.selectedTime == null && this.selectedTypes == 0) {
+                this.clearAll = true;
             }
+            this.displayedWorkouts = [];
+
+            var that = this;
+
+            if (this.clearAll) {
+                this.selectedTypes = [];
+            }
+            console.log("updating display")
+            this.allWorkouts.forEach(function (workout) {
+                var hasAllSelectedTags = true;
+                that.selectedTypes.forEach(function (tag) {
+                    if (!workout.tags.includes(tag)) {
+                    hasAllSelectedTags = false;
+                    };
+                });
+                console.log("that.selectedTime == workout.duration", that.selectedTime == workout.duration);
+                if (hasAllSelectedTags && (that.selectedTime == workout.duration || that.selectedTime == null)) {
+                    that.displayedWorkouts.push(workout);
+                }
+            });
         },
         remove(array, type) {
             for (var i = 0; i < array.length; i++) {
@@ -117,7 +149,6 @@ export default {
                 }
             }
         },
-
         toCreate() {
             this.$router.push('/create');
         },
@@ -128,7 +159,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 .timeOptions {
     display: flex;
 }
@@ -151,7 +182,7 @@ export default {
     overflow-y: scroll;
 }
 .tag-bubble {
-    margin: 0 10px 0 10px;
+    margin: 0 10px 5px 10px;
     background: #3f3f3f;
     padding: 0 20px 0 20px;
     border-radius: 20px;
@@ -159,6 +190,10 @@ export default {
 }
 .tag-flex {
     display: flex;
+    max-width: 60%;
+    margin-right: 10px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
 }
 .workout-card-title {
     font-size: 26px;
@@ -168,6 +203,7 @@ export default {
     display: flex;
     align-items: center;
     margin-top: 5px;
+    justify-content: space-between;
 }
 .workouts-page {
     text-align: left;
