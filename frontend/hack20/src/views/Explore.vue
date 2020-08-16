@@ -91,7 +91,8 @@ export default {
     },
     async mounted() {
         var alreadySaved = [];
-        await fetch('https://hack-2020-backend.uc.r.appspot.com/users/5f387cc2cd4be563940f57de',
+        console.log("localstorage", localStorage.getItem('userId'))
+        await fetch('https://hack-2020-backend.uc.r.appspot.com/users/' + localStorage.getItem('userId'),
           {
               method: 'GET', // *GET, POST, PUT, DELETE, etc.
               headers: {
@@ -137,14 +138,14 @@ export default {
     },
     methods: {
         save() {
-            fetch("https://hack-2020-backend.uc.r.appspot.com/workouts/" + this.selectedWorkout._id + "/save",
+            fetch("https://hack-2020-backend.uc.r.appspot.com/workouts/" + this.selectedWorkout._id + "/save?" + new URLSearchParams({ userId: localStorage.getItem('userId') }),
                 {
                     method: 'POST'
                 })
                 .then(res => res.json())
                 .then(res => {
                     console.log(res);
-                    window.location.reload();
+                    // window.location.reload();
                 })
                 .catch(err => {
                     console.log(err);

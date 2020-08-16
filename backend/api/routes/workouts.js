@@ -37,10 +37,11 @@ router.get('/:workoutId', (req, res, next) => {
 
 router.post('/:workoutId/save', (req, res, next) => {
     const id = req.params.workoutId;
+    const userId = req.query.userId;
     Workout.findById(id)
         .exec()
         .then(workout => {
-            User.findOne({ _id: workout.user }, (err, user) => {
+            User.findOne({ _id: userId }, (err, user) => {
                 if (user) {
                     console.log(user);
                     user.saved_posts.push(workout);
@@ -99,11 +100,12 @@ router.delete('/:workoutId', (req, res, next) => {
 
 router.delete('/:workoutId/unsave', (req, res, next) => {
     const id = req.params.workoutId;
+    const userId = req.query.userId;
     Workout.findById(id)
         .exec()
         .then(workout => {
             console.log(workout)
-            User.findOne({ _id: workout.user }, (err, user) => {
+            User.findOne({ _id: userId }, (err, user) => {
                 if (user) {
                     console.log(user);
                     user.saved_posts.pull(workout);
