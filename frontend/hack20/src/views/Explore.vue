@@ -138,7 +138,7 @@ export default {
     },
     methods: {
         save() {
-            fetch("https://hack-2020-backend.uc.r.appspot.com/workouts/" + this.selectedWorkout._id + "/save",
+            fetch("https://hack-2020-backend.uc.r.appspot.com/workouts/" + this.selectedWorkout._id + "/save?" + new URLSearchParams({ userId: localStorage.getItem('userId') }),
                 {
                     method: 'POST'
                 })
