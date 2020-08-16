@@ -9,12 +9,12 @@
         <button type="button" class="btn btn-outline-dark" @click="toHome()">Home</button>
         <button type="button" class="btn btn-outline-dark" @click="toExplore()">Explore</button>
         <button type="button" class="btn btn-outline-dark" @click="toCreate()">Create</button>
-        <p>Welcome Andrea</p>
+        <p>Welcome {{ loggedUser }}</p>
         <img src="../public/arrow.png" alt="drop down arrow" @click="showUsers()">
       </div>
       <div id="user-menu" v-if="showDropDown">
-        <button type="button" class="btn btn-outline-dark" @click="switchUsers(this.users.Andrea)">Andrea</button>
-        <button type="button" class="btn btn-outline-dark" @click="switchUsers(this.users.David)">David</button>
+        <button type="button" class="btn btn-outline-dark" @click="switchUsers('5f387cc2cd4be563940f57de')">Andrea</button>
+        <button type="button" class="btn btn-outline-dark" @click="switchUsers('5f391d85cda06e001f39cca6')">David</button>
       </div>
     </div>
     <router-view />
@@ -25,12 +25,12 @@
 export default {
   data() {
     return {
-      users: {
-        "Andrea": '5f387cc2cd4be563940f57de',
-        "David": '5f391d85cda06e001f39cca6'
-      },
-      showDropDown: false
+      showDropDown: false,
+      loggedUser: null
     }
+  },
+  mounted() {
+    this.loggedUser = localStorage.getItem('userId');
   },
   methods: {
     toHome() {

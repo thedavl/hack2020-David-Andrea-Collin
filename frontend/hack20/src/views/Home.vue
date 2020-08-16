@@ -106,7 +106,7 @@ export default {
         .then(res => res.json())
         .then(res => {
           console.log(res);
-          window.location.reload();
+          // window.location.reload();
         })
         .catch(err => {
           console.log(err);
@@ -119,6 +119,7 @@ export default {
       this.$router.push('/explore');
     },
     getAllWorkouts() {
+      console.log("localstorage", localStorage.getItem('userId'))
       fetch('https://hack-2020-backend.uc.r.appspot.com/users/' + localStorage.getItem('userId'),
           {
               method: 'GET', // *GET, POST, PUT, DELETE, etc.
