@@ -10,17 +10,19 @@
         <p class="workouts-header">
             Workouts
         </p>
-        <div class="workout-card" v-for="workout in displayedWorkouts" :key="workout.title">
-            <div class="workout-card-header">
-                <p class="workout-card-title">{{ workout.title }}</p>
-                <div class="tag-flex">
-                    <p class="tag-bubble" v-for="tag in workout.tags" :key="tag">
-                        {{ tag }}
-                    </p>
+        <div class="workout-card-container">
+            <div class="workout-card" v-for="workout in displayedWorkouts" :key="workout.title">
+                <div class="workout-card-header">
+                    <p class="workout-card-title">{{ workout.title }}</p>
+                    <div class="tag-flex">
+                        <p class="tag-bubble" v-for="tag in workout.tags" :key="tag">
+                            {{ tag }}
+                        </p>
+                    </div>
                 </div>
+                <p>{{ workout.description }}</p>
+                <p>Duration: {{ workout.duration }}</p>
             </div>
-            <p>{{ workout.description }}</p>
-            <p>Duration: {{ workout.duration }}</p>
         </div>
     </div>
 </template>
@@ -65,6 +67,11 @@ export default {
 </script>
 
 <style scoped>
+.workout-card-container {
+    height: 70vh;
+    width: 40vw;
+    overflow-y: scroll;
+}
 .tag-bubble {
     margin: 0 10px 0 10px;
     background: #3f3f3f;
@@ -89,10 +96,10 @@ export default {
     margin-left: 30vw;
 }
 .workout-card {
-    width: 40vw;
     background: #C4C4C4;
     border-radius: 20px;
     padding: 5px 0px 5px 20px;
     margin-bottom: 20px;
+    margin-right: 5px;
 }
 </style>
