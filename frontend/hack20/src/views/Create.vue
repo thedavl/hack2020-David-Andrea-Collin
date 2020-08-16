@@ -1,15 +1,90 @@
 <template>
     <div>
-        <p>THIS IS THE CREATE PAGE</p>
+        <p class="createTitle">THIS IS THE CREATE PAGE</p>
+        <input name="workout_name" placeholder="workout name...">
+        <p> Type (select all that apply)</p>
+
+        <!--display tags here -->
+        <div class = "typeOptions">
+            <li v-for="type in workoutTypes" :key="type">
+                <button :id="type" @click="updateSelectedTypes(type)" :class="{ focus: selectedTypes.includes(type) }">{{ type }}</button>
+            </li>
+        </div>
+        <!--display times here -->
+        <div class = "timeOptions">
+            <li v-for="time in workoutTimes" :key="time">
+                <button :id="time" @click="updateSelectedTime(time)" :class="{ focus: selectedTime == time }">{{ time }}</button>
+            </li>
+        </div>
+        <div>
+            <p> "{{selectedTypes}}</p>
+            <p> "{{selectedTime}}</p>
+        </div>
     </div>
 </template>
 
 <script>
 export default {
-    name: "Create"
+    name: "Create",
+    data() {
+        return {
+        workoutTypes: [
+        "full-body",
+        "calisthenics",
+        "core",
+        "hiit",
+        "strength",
+        "upper-body",
+        "lower-body",
+        "arms",
+        "legs"
+      ],
+      workoutTimes: [
+        5,
+        10,
+        15,
+        20,
+        25,
+        30,
+        45,
+        60,
+        120
+      ],
+      selectedTime: 0,
+      selectedTypes: []
+      }
+    },
+    methods: {
+        updateSelectedTypes(type) {
+            if (this.selectedTypes.includes(type)) {
+                this.remove(this.selectedTypes, type);
+            } else {
+                this.selectedTypes.push(type);
+            }
+        },
+        updateSelectedTime(time) {
+            this.selectedTime = time;
+        },
+        remove(array, type) {
+            for (var i = 0; i < array.length; i++) {
+                if (array[i] == type) {
+                    array.splice(i, 1);
+                }
+            }
+        }
+    }
 }
 </script>
 
 <style scoped>
-
+    p{  font-size: 14pt;
+        color:blue; }
+    /*
+    button:focus {
+        color: green;
+    }
+    button{
+        color: black;
+    }
+    */
 </style>

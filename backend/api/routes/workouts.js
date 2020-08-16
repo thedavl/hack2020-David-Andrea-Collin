@@ -3,6 +3,7 @@ const router = express.Router();
 const mongoose = require('mongoose');
 
 const Workout = require('../models/workout');
+const User = require('../models/user');
 
 router.get('/', (req, res, next) => {
     Workout.find()
@@ -38,20 +39,48 @@ router.post('/', (req, res, next) => {
     const workout = new Workout({
         _id: new mongoose.Types.ObjectId(),
         title: req.body.title,
-        description: req.body.description
+        description: req.body.description,
+        user: req.body.user,
+        tags: req.body.tags,
+        duration: req.body.duration
     });
     workout
         .save()
         .then(result => {
-            res.status(201).json({
-                message: 'POSTed to workout endpoint',
-                createdWorkout: result
-            });
+            console.log(result);
+            User.findOne({ _id: req.body.user }, (err, user) => {
+                if (user) {
+                    console.log(user);
+                    user.saved_posts.push(workout);
+                    user.save();
+                    res.status(201).json({
+                        message: 'Problem saved successfully',
+                        createdWorkout: result
+                    })
+                } else {
+                    Workout.remove({ _id: workout._id });
+                    res.status(500).json({ error: err, message: "dskflaksdflkjf" });
+                }
+            })
         })
         .catch(err => {
             console.log(err);
             res.status(500).json({ error: err });
         });
+});
+
+router.delete('/:workoutId', (req, res, next) => {
+    const id = req.params.workoutId;
+    Workout.remove({ _id: id })
+        .exec()
+        .then(result => {
+            console.log(res);
+            res.status(200).json(result)
+        })
+        .catch(err => {
+            console.log(res);
+            res.status(500).json({ error: err });
+        })
 });
 
 module.exports = router;
