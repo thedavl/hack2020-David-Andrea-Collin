@@ -26,11 +26,15 @@ export default {
   data() {
     return {
       showDropDown: false,
-      loggedUser: null
+      loggedUser: null,
+      userMap: {
+        '5f387cc2cd4be563940f57de': 'Andrea',
+        '5f391d85cda06e001f39cca6': 'David'
+      }
     }
   },
   mounted() {
-    this.loggedUser = localStorage.getItem('userId');
+    this.loggedUser = this.userMap[localStorage.getItem('userId')];
   },
   methods: {
     toHome() {
@@ -48,6 +52,7 @@ export default {
     switchUsers(id) {
       localStorage.setItem('userId', id);
       this.showDropDown = false;
+      window.location.reload();
     }
   }
 }
