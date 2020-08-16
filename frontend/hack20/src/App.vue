@@ -104,6 +104,11 @@ export default {
   margin: 0px 5px 5px 5px;
 }
 
+#nav-links-and-profile img:hover {
+  height: 18px;
+  margin-left: 7px;
+}
+
 #nav-links-and-profile img {
   height: 15px;
   margin-left: 10px;
@@ -114,6 +119,17 @@ export default {
   height: 20px;
   margin-left: 15px;
   margin-top: 5px;
+}
+
+#user-menu {
+  position: absolute;
+  top: 60px;
+  right: 20px;
+}
+
+#user-menu button {
+  margin-left: 5px;
+  margin-right: 5px;
 }
 
 ::-webkit-scrollbar {
