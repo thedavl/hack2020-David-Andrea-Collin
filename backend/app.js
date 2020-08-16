@@ -5,6 +5,7 @@ const bodyparser = require('body-parser');
 const mongoose = require('mongoose');
 
 const workoutRoutes = require('./api/routes/workouts');
+const userRoutes = require('./api/routes/users')
 
 mongoose.connect(
     'mongodb+srv://Hack2020Admin:' + 
@@ -34,7 +35,12 @@ app.use((req, res, next) => {
   }
 );
 
+app.get('/', (req, res, next) => {
+    res.send('This is the backend for Hack 2020 - David, Andrea, Collin');
+})
+
 app.use('/workouts', workoutRoutes);
+app.use('/users', userRoutes);
 
 app.use((req, res, next) => {
     const error = new Error('Not Found');
