@@ -1,40 +1,44 @@
 <template>
-    <div>
-        <!-- title and field to insert name -->
-        <p class="createTitle">Create Your Own Workout!</p>
-        <input name="workout_name" placeholder="workout name...">
-        <p> Type (select all that apply)</p>
+    <div id="create-page">
+        <h2 id="createWorkoutTitle">Create Workout</h2>
+        <div id="create-page-body">
+            <div id="left-create">
+                <input name="workout_name" placeholder="workout name">
+                <br> <br>
 
-        <!--display types here -->
-        <div class = "typeOptions">
-            <div v-for="type in workoutTypes" :key="type">
-                <button :id="type" @click="updateSelectedTypes(type)" :class="{ active: selectedTypes.includes(type) }" class="btn btn-success">{{ type }}</button>
+                <p>Type (select all that apply)</p>
+
+                <div class = "typeOptions">
+                    <div v-for="type in workoutTypes" :key="type">
+                        <button :id="type" @click="updateSelectedTypes(type)" :class="{ active: selectedTypes.includes(type) }" class="btn btn-success">{{ type }}</button>
+                    </div>
+                </div>
+
+                <br>
+
+                <p>Total Time</p>
+                <div class = "timeOptions">
+                    <div v-for="time in workoutTimes" :key="time">
+                        <button :id="time" @click="updateSelectedTime(time)" :class="{ active: selectedTime == time }" class="btn btn-secondary">{{ time }}</button>
+                    </div>
+                </div>
             </div>
-        </div>
-        <!--display times here -->
-        <div class = "timeOptions">
-            <div v-for="time in workoutTimes" :key="time">
-                <button :id="time" @click="updateSelectedTime(time)" :class="{ active: selectedTime == time }" class="btn btn-secondary">{{ time }}</button>
+            
+            <div id="right-create">
+                <div> 
+                    <p> Workout </p>
+                    <button @click="addMove()"> Add Set! </button>
+                    <input name="set_name" placeholder="set name...">
+                    <button :id="setNum" @click="incrementNumber()">{{setNum + "x"}}</button> 
+                </div>
+
+                <div> <button @click="addMove()"> Add Rep! </button> </div>
+
+                <div class="new set">
+                    <label for="duration">:</label>
+                    <input type="text" required placeholder="set name">
+                </div>
             </div>
-        </div>
-        <!-- displays selected types and times for debugging purposes -->
-        <div>
-            <p> "{{selectedTypes}}</p>
-            <p> "{{selectedTime}}</p>
-        </div>
-        <!-- add sets and reps of new workout -->
-        <div> 
-            <p> Workout </p>
-            <div> <button @click="addMove()"> Add Set! </button> </div>
-            <input name="set_name" placeholder="set name...">
-            <button :id="setNum" @click="incrementNumber()">{{setNum + "x"}}</button> 
-        </div>
-
-        <div> <button @click="addMove()"> Add Rep! </button> </div>
-
-        <div class="new set">
-        <label for="duration">:</label>
-        <input type="text" required placeholder="set name">
         </div>
     </div>
 </template>
@@ -53,7 +57,8 @@ export default {
             "upper-body",
             "lower-body",
             "arms",
-            "legs"
+            "legs",
+            "cardio"
             ],
             workoutTimes: [
                 5,
@@ -117,36 +122,50 @@ export default {
 </script>
 
 <style scoped>
-    p {
-        font-size: 14pt;
-        color:blue;
-    }
-    .typeOptions {
-        display: flex;
-        flex-direction: row;
-        margin: 5px;
-        align-content: center;
-        margin-left: 30vw;
-    }
-    .timeOptions {
-        display: flex;
-        flex-direction: row;
-        margin: 5px;
-        align-content: center;
-        margin-left: 30vw;
-    }
-    button {
-        margin: 5px;;
-    }
-    span{
+
+#create-page {
+  text-align: left;
+  margin: 0 auto;
+  max-width: 1000px;
+}
+
+#create-page-body {
+    display: flex;
+    flex-direction: row;
+}
+
+.typeOptions {
+    display: flex;
+    flex-direction: row;
+    margin: 5px;
+    align-content: center;
+    width: 75%;
+    flex-wrap: wrap;
+}
+
+.timeOptions {
+    display: flex;
+    flex-direction: row;
+    margin: 5px;
+    align-content: center;
+    width: 75%;
+    flex-wrap: wrap;
+}
+
+button {
+    margin: 5px;;
+}
+
+span{
   width: 30px;
   float: right;
   cursor: pointer;
 }
-span:hover{
+span:hover {
   color: brown;
 }
-.previous{
+
+.previous {
   border: 1.5px solid;
   padding:5px;
   margin-bottom: 10px;
