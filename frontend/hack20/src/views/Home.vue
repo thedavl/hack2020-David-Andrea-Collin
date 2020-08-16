@@ -6,17 +6,15 @@
       <h2 class="savedWorkoutsTitle">Saved Workouts</h2>
       
       <div class="typeOptions">
-        <button class="btn btn-outline-dark" id="all" @click="updateSelectedTypes('all')" :class="{ active: showAll }">all</button>
-        <button class="btn btn-outline-dark" id="none" @click="updateSelectedTypes('none')" :class="{ active: showNone }">none</button>
+        <button class="btn btn-outline-dark" id="all" @click="updateSelectedTypes('clear')" :class="{ active: clearAll }">Clear</button>
 
         <div v-for="type in workoutTypes" :key="type">
           <button class="btn btn-outline-dark" :id="type" @click="updateSelectedTypes(type)" :class="{ active: selectedTypes.includes(type) }">{{ type }}</button>
         </div>
       </div>
-
       <div class="timeOptions">
         <div v-for="time in workoutTimes" :key="time">
-          <button class="btn btn-outline-dark" :id="time" @click="updateActiveTimes(time)" :class="{ active: selectedTypes.includes(time) }">{{ time }}</button>
+          <button class="btn btn-outline-dark" :id="time" @click="updateSelectedTime(time)" :class="{ active: selectedTime == time }">{{ time }}</button>
         </div>
       </div>
 
@@ -45,12 +43,12 @@ export default {
   name: "Home",
   mounted() {
     this.getAllWorkouts();
-    var that = this;
-    this.workoutTypes.forEach(function (workout) {
-      that.selectedTypes.push(workout);
-    });
+    // var that = this;
+    // this.workoutTypes.forEach(function (workout) {
+    //   that.selectedTypes.push(workout);
+    // });
     // this.workoutTimes.forEach(function (time) {
-    //   that.activeTimes.push(workout);
+    //   that.selectedTimes.push(time);
     // });
   },
   data() {
@@ -80,9 +78,8 @@ export default {
       allWorkouts: [],
       displayedWorkouts: [],
       selectedTypes: [],
-      activeTimes: [],
-      showAll: true,
-      showNone: false
+      selectedTime: null,
+      clearAll: true
     }
   },
   methods: {
@@ -108,106 +105,58 @@ export default {
           console.log(err);
       });
     },
+    updateSelectedTime(time) {
+      if (this.selectedTime == time) {
+        this.selectedTime = null;
+      } else {
+        this.selectedTime = time;
+        this.clearAll = false;
+      }
+      this.updateDisplayed();
+    },
     updateSelectedTypes(type) {
-      var that = this;
 
-      if (type == 'none') {
+      if (type == 'clear') {
+        console.log("ALL IS PRESSED")
         this.selectedTypes = [];
-        this.displayedWorkouts = [];
-        this.showNone = true;
-        this.showAll = false;
-        this.updateDisplayed();
-        return;
-      }
-
-      if (type == 'all') {
-        this.selectedTypes = [];
-        this.allWorkouts.forEach(function (workout) {
-          workout.tags.forEach(function (tag) {
-            if (!that.selectedTypes.includes(tag)) {
-              that.selectedTypes.push(tag);
-            };
-          });
-        });
-        this.showAll = true;
-        this.showNone = false;
+        this.selectedTime = null;
+        this.clearAll = true;
         this.displayedWorkouts = this.allWorkouts;
-        this.updateDisplayed();
         return;
       }
-      this.showNone = false;
+      this.clearAll = false;
       console.log("typeee", type);
       if (this.selectedTypes.includes(type)) {
         this.remove(this.selectedTypes, type);
       } else {
         this.selectedTypes.push(type);
       }
-      if (this.selectedTypes.length == 0) {
-        this.showNone = true;
-      }
-      this.updateDisplayed();
-    },
-    updateActiveTimes(time) {
-      if (this.activeTime.includes(time)) {
-        this.remove(this.activeTimes, time);
-      } else {
-        this.activeTimes.push(time);
-      }
       this.updateDisplayed();
     },
     updateDisplayed() {
-      this.displayedWorkouts = [];
-
-      if (this.showNone) {
-        return;
+      if (this.selectedTime == null && this.selectedTypes == 0) {
+        this.clearAll = true;
       }
+      this.displayedWorkouts = [];
 
       var that = this;
 
-      if (this.showAll) {
-        for (var i = 0; i < this.workoutTypes.length; i++) {
-          that.selectedTypes.push(that.workoutTypes[i]);
-        }
-        that.allWorkouts.forEach(function (workout) {
-          that.displayedWorkouts.push(workout);
-        });
-        return;
+      if (this.clearAll) {
+        this.selectedTypes = [];
       }
       console.log("updating display")
       this.allWorkouts.forEach(function (workout) {
-          console.log("iterating over:", workout.tags);
           var hasAllSelectedTags = true;
           that.selectedTypes.forEach(function (tag) {
             if (!workout.tags.includes(tag)) {
               hasAllSelectedTags = false;
             };
           });
-          if (hasAllSelectedTags) {
-            console.log("adding: " + workout.title);
+          console.log("that.selectedTime == workout.duration", that.selectedTime == workout.duration);
+          if (hasAllSelectedTags && (that.selectedTime == workout.duration || that.selectedTime == null)) {
             that.displayedWorkouts.push(workout);
           }
       });
-
-      // this.allWorkouts.forEach(function (workout) {
-      //   var containsAllTypes = true;
-      //   that.selectedTypes.forEach(function (type) {
-      //     if (!workout.tags.includes(type)) {
-      //       containsAllTypes = false;
-      //     }
-      //   });
-      //   if (containsAllTypes) {
-      //     that.displayedWorkouts.push(workout);
-      //   }
-      // });
-
-      // var tempWorkouts = [];
-      // this.displayedWorkouts.forEach(function (workout) {
-      //   if (that.activeTimes.includes(workout.duration)) {
-      //     tempWorkouts.push(workout);
-      //   }
-      // });
-
-      // this.displayedWorkouts = tempWorkouts;
     },
     remove(array, type) {
       for (var i = 0; i < array.length; i++) {
@@ -221,6 +170,9 @@ export default {
 </script>
 
 <style scoped>
+.btn {
+  margin-right: 10px;
+}
 .workout-card {
     background: #C4C4C4;
     border-radius: 20px;
@@ -230,9 +182,11 @@ export default {
 }
 .timeOptions {
     display: flex;
+    margin-bottom: 5px;
 }
 .typeOptions {
     display: flex;
+    margin-bottom: 5px;
 }
 .home-page {
   text-align: left;
