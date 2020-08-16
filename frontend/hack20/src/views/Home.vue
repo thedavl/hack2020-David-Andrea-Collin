@@ -10,6 +10,10 @@
 
 export default {
   name: "Home",
+  data() {
+    return {
+    }
+  },
   methods: {
     toExplore() {
       this.$router.push('/explore');
