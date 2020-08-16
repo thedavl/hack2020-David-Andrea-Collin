@@ -41,7 +41,6 @@
               <p class="tag-bubble" v-for="tag in selectedWorkout.tags" :key="tag" :id="'static-' + tag">
                 {{ tag }}
               </p>
-              <p>By: {{ selectedWorkout.user }}</p>
             </div>
             <div class="detail-description-container">
               {{ selectedWorkout.description }}

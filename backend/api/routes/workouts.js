@@ -75,20 +75,7 @@ router.post('/', (req, res, next) => {
         .save()
         .then(result => {
             console.log(result);
-            User.findOne({ _id: req.body.user }, (err, user) => {
-                if (user) {
-                    console.log(user);
-                    user.saved_posts.push(workout);
-                    user.save();
-                    res.status(201).json({
-                        message: 'Problem saved successfully',
-                        createdWorkout: result
-                    })
-                } else {
-                    Workout.remove({ _id: workout._id });
-                    res.status(500).json({ error: err, message: "dskflaksdflkjf" });
-                }
-            })
+            res.status(201).json({ message: "successfully created post"})
         })
         .catch(err => {
             console.log(err);
