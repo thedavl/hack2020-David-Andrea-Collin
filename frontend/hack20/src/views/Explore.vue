@@ -1,7 +1,5 @@
 <template>
     <div class="workouts-page">
-        <button type="button" class="btn btn-outline-dark" @click="toCreate()">To Create Page</button>
-        <button type="button" class="btn btn-outline-dark" @click="toHome()">To Home Page</button>
         <h2 class="savedWorkoutsTitle">Explore Workouts</h2>
         <div class="typeOptions">
             <button class="btn btn-outline-dark" id="all" @click="updateSelectedTypes('clear')" :class="{ active: clearAll }">Clear</button>
@@ -20,22 +18,33 @@
             Workouts
         </p>
         <div class="main-flex">
-            <div class="workout-card-container">
-                <div class="workout-card" v-for="workout in displayedWorkouts" :key="workout.title">
-                    <div class="workout-card-header">
-                        <p class="workout-card-title">{{ workout.title }}</p>
-                        <div class="tag-flex">
-                            <p class="tag-bubble" v-for="tag in workout.tags" :key="tag">
-                                {{ tag }}
-                            </p>
-                        </div>
-                    </div>
-                    <p>{{ workout.description }}</p>
-                    <p>Duration: {{ workout.duration }}</p>
+          <div class="workout-card-container">
+            <div class="workout-card" v-for="workout in displayedWorkouts" :key="workout.title" @click="switchSelectedWorkout(workout)">
+              <div class="workout-card-header">
+                <p class="workout-card-title">{{ workout.title }}</p>
+                <div class="tag-flex">
+                  <p class="tag-bubble" v-for="tag in workout.tags" :id="'static-' + tag" :key="tag">
+                    {{ tag }}
+                  </p>
                 </div>
+              </div>
             </div>
-            <div class="detail-container">
+          </div>
+          <div class="detail-container" v-if="selectedWorkout != null">
+            <div class="detail-header-flex">
+              <p class="detail-title">{{ selectedWorkout.title }}</p>
+              <p class="duration">{{ selectedWorkout.duration }} Minutes</p>
             </div>
+            <div class="detail-tag-flex">
+              <p class="tag-bubble" v-for="tag in selectedWorkout.tags" :key="tag" :id="'static-' + tag">
+                {{ tag }}
+              </p>
+            </div>
+            <div class="detail-description-container">
+              {{ selectedWorkout.description }}
+            </div>
+          </div>
+          <div class="detail-container" v-else></div>
         </div>
     </div>
 </template>
@@ -71,7 +80,8 @@ export default {
             displayedWorkouts: [],
             selectedTypes: [],
             selectedTime: null,
-            clearAll: true
+            clearAll: true,
+            selectedWorkout: null
         }
     },
     mounted() {
@@ -94,6 +104,9 @@ export default {
             });
     },
     methods: {
+        switchSelectedWorkout(workout) {
+            this.selectedWorkout = workout;
+        },
         updateSelectedTime(time) {
             if (this.selectedTime == time) {
                 this.selectedTime = null;
@@ -212,7 +225,8 @@ export default {
 }
 .workouts-page {
     text-align: left;
-    margin-left: 30vw;
+    margin: 0 auto;
+    max-width: 1000px;
 }
 .workout-card {
     background: #C4C4C4;
